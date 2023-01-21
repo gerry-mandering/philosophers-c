@@ -6,7 +6,7 @@
 /*   By: minseok2 <minseok2@student.42seoul.kr      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 15:09:44 by minseok2          #+#    #+#             */
-/*   Updated: 2023/01/20 14:41:30 by minseok2         ###   ########.fr       */
+/*   Updated: 2023/01/21 15:06:04 by minseok2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,10 @@ int	main(int argc, char **argv)
 	t_shared_resources	shared_resources;
 	t_philosopher		*philosopher_arr;
 
-	state = INIT_SPEC;
+	state = INIT_RULE;
 	while (state != FINISH)
 	{
-		if (state == INIT_SPEC)
+		if (state == INIT_RULE)
 			init_rule(&state, &rule, argc, argv);
 		else if (state == INIT_SHARED_RESOURCES)
 			init_shared_resources(&state, &rule, &shared_resources);

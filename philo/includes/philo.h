@@ -6,7 +6,7 @@
 /*   By: minseok2 <minseok2@student.42seoul.kr      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 15:11:37 by minseok2          #+#    #+#             */
-/*   Updated: 2023/01/20 17:35:02 by minseok2         ###   ########.fr       */
+/*   Updated: 2023/01/21 15:06:19 by minseok2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@
 
 typedef enum e_state
 {
-	INIT_SPEC,
+	INIT_RULE,
 	INIT_SHARED_RESOURCES,
 	INIT_PHILOSOPHER_ARR,
 	CREATE_THREADS,
@@ -92,7 +92,6 @@ typedef struct t_philosopher
 	t_rule					rule;
 	pthread_t				thread;
 	uint64_t				number;
-	char					*number_string;
 	t_finish_dinner_count	*finish_dinner_count;
 	t_flag					*start_flag;
 	t_time					*start_time;
