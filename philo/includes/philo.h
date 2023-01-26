@@ -6,7 +6,7 @@
 /*   By: minseok2 <minseok2@student.42seoul.kr      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 15:11:37 by minseok2          #+#    #+#             */
-/*   Updated: 2023/01/21 15:06:19 by minseok2         ###   ########.fr       */
+/*   Updated: 2023/01/26 23:51:42 by minseok2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,5 +134,8 @@ void		monitoring(t_state *state, t_rule *rule, \
 // join_thread
 void		join_thread(t_state *state, t_rule *rule, \
 												t_philosopher *philosopher_arr);
+
+// error
+void	error(t_state *state);
 
 #endif
