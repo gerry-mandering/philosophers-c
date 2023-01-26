@@ -6,17 +6,11 @@
 /*   By: minseok2 <minseok2@student.42seoul.kr      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 15:09:44 by minseok2          #+#    #+#             */
-/*   Updated: 2023/01/21 15:06:04 by minseok2         ###   ########.fr       */
+/*   Updated: 2023/01/26 23:51:23 by minseok2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
-
-void	error(t_state *state)
-{
-	printf("Error occurred\n");
-	*state = FINISH;
-}
 
 int	main(int argc, char **argv)
 {
