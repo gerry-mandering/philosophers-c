@@ -5,27 +5,43 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: minseok2 <minseok2@student.42seoul.kr      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/19 12:17:20 by minseok2          #+#    #+#             */
-/*   Updated: 2023/01/20 14:41:41 by minseok2         ###   ########.fr       */
+/*   Created: 2023/01/27 16:10:58 by minseok2          #+#    #+#             */
+/*   Updated: 2023/01/27 17:02:00 by minseok2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/philo.h"
 
+void	init_basic_rule(t_state *state, t_rule *rule, char **argv)
+{
+	rule->number_of_philosophers = ascii_to_ull(state, argv[1]);
+	rule->time_to_die = ascii_to_ull(state, argv[2]);
+	rule->time_to_eat = ascii_to_ull(state, argv[3]);
+	rule->time_to_sleep = ascii_to_ull(state, argv[4]);
+}
+
+void	init_additional_rule(t_state *state, t_rule *rule, char **argv)
+{
+	rule->required_number_of_meals = ascii_to_ull(state, argv[5]);
+}
+
 void	init_rule(t_state *state, t_rule *rule, int argc, char **argv)
 {
-	if (argc != 5 && argc != 6)
-		*state = ERROR;
-	init_number_of_philosophers(state, &rule->number_of_philosophers, argv[1]);
-	init_time_to_die(state, &rule->time_to_die, argv[2]);
-	init_time_to_eat(state, &rule->time_to_eat, argv[3]);
-	init_time_to_sleep(state, &rule->time_to_sleep, argv[4]);
-	if (argc == 6)
+	if (argc == 5)
 	{
-		rule->number_of_meals_flag = ON;
-		init_number_of_meals(state, &rule->number_of_meals, argv[5]);
+		rule->required_number_of_meals_flag = OFF;
+		init_basic_rule(state, rule, argv);
+	}
+	else if (argc == 6)
+	{
+		rule->required_number_of_meals_flag = ON;
+		init_basic_rule(state, rule, argv);
+		init_additional_rule(state, rule, argv);
 	}
 	else
-		rule->number_of_meals_flag = OFF;
+	{
+		*state = ERROR;
+		return ;
+	}
 	*state = INIT_SHARED_RESOURCES;
 }

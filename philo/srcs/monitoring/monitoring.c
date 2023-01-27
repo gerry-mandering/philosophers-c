@@ -5,38 +5,47 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: minseok2 <minseok2@student.42seoul.kr      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/20 12:04:51 by minseok2          #+#    #+#             */
-/*   Updated: 2023/01/20 15:32:23 by minseok2         ###   ########.fr       */
+/*   Created: 2023/01/27 18:45:54 by minseok2          #+#    #+#             */
+/*   Updated: 2023/01/27 20:43:56 by minseok2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/philo.h"
 
-void	monitoring(t_state *state, t_rule *rule, \
-			t_shared_resources *shared_resources, t_philosopher *philosopher_arr)
+static void	start_dining(t_shared_resources *shared_resources)
 {
 	pthread_mutex_lock(&shared_resources->start_flag.mutex);
-	shared_resources->start_flag.flag = ON;
+	shared_resources->start_flag.state = ON;
 	pthread_mutex_unlock(&shared_resources->start_flag.mutex);
+}
+
+int	is_dead_flag_on(t_shared_resources *shared_resources)
+{
+	t_flag_state	flag;
+
+	pthread_mutex_lock(&shared_resources->dead_flag.mutex);
+	if (shared_resources->dead_flag.state == ON)
+		flag = ON;
+	else
+		flag = OFF;
+	pthread_mutex_unlock(&shared_resources->dead_flag.mutex);
+	return (flag);
+}
+
+int	is_dining_finished(t_rule *rule, t_shared_resources *shared_resources)
+{
+	
+}
+
+void	monitoring(t_state *state, t_rule *rule, \
+										t_shared_resources *shared_resources)
+{
+	start_dining(shared_resources);
 	while (1)
 	{
-		pthread_mutex_lock(&shared_resources->dead_flag.mutex);
-		if (shared_resources->dead_flag.flag == ON)
-		{
-			pthread_mutex_unlock(&shared_resources->dead_flag.mutex);
+		if (is_dead_flag_on(shared_resources) || \
+									is_dining_finished(rule, shared_resources))
 			break ;
-		}
-		pthread_mutex_unlock(&shared_resources->dead_flag.mutex);
-		if (rule->number_of_meals_flag == ON)
-		{
-			pthread_mutex_lock(&shared_resources->finish_dinner_count.mutex);
-			if (shared_resources->finish_dinner_count.finish_dinner_count == rule->number_of_meals)
-			{
-				pthread_mutex_unlock(&shared_resources->finish_dinner_count.mutex);
-				break ;
-			}
-			pthread_mutex_unlock(&shared_resources->finish_dinner_count.mutex);
-		}
 	}
 	*state = JOIN_THREADS;
 }

@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: minseok2 <minseok2@student.42seoul.kr      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/18 15:11:37 by minseok2          #+#    #+#             */
-/*   Updated: 2023/01/21 15:06:19 by minseok2         ###   ########.fr       */
+/*   Created: 2023/01/27 10:07:55 by minseok2          #+#    #+#             */
+/*   Updated: 2023/01/27 18:45:27 by minseok2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,22 +14,19 @@
 # define PHILO_H
 
 # include <unistd.h>
-# include <stdlib.h>
 # include <stdio.h>
+# include <stdlib.h>
+# include <string.h>
 # include <stdint.h>
 # include <sys/time.h>
 # include <pthread.h>
 
-# define SUCCESS	0
-
-# define ON		1
-# define OFF	0
-
+// define fsm state
 typedef enum e_state
 {
 	INIT_RULE,
 	INIT_SHARED_RESOURCES,
-	INIT_PHILOSOPHER_ARR,
+	INIT_PHILO_ARR,
 	CREATE_THREADS,
 	MONITORING,
 	JOIN_THREADS,
@@ -38,101 +35,104 @@ typedef enum e_state
 	ERROR
 }	t_state;
 
+// define fork state
 typedef enum e_fork_state
 {
 	RELEASE,
 	HOLD
 }	t_fork_state;
 
+// define fork with state and mutex
 typedef struct s_fork
 {
 	t_fork_state	state;
-	pthread_mutex_t	fork_mutex;
+	pthread_mutex_t	mutex;
 }	t_fork;
 
+// define flag state
+typedef enum e_flag_state
+{
+	OFF,
+	ON
+}	t_flag_state;
+
+// define flag with state and mutex
 typedef struct s_flag
 {
-	int				flag;
+	t_flag_state	state;
 	pthread_mutex_t	mutex;
 }	t_flag;
 
+// define time with timevalue and mutex
 typedef struct s_time
 {
-	struct timeval	time;
+	struct timeval	value;
 	pthread_mutex_t	mutex;
 }	t_time;
 
-typedef struct s_finish_dinner_count
+// define count with count value and mutex
+typedef struct s_count
 {
-	uint64_t		finish_dinner_count;
+	int				value;
 	pthread_mutex_t	mutex;
-}	t_finish_dinner_count;
+}	t_count;
 
+// define rule
 typedef struct s_rule
 {
-	uint64_t	number_of_philosophers;
-	uint64_t	time_to_die;
-	uint64_t	time_to_eat;
-	uint64_t	time_to_sleep;
-	uint64_t	number_of_meals;
-	int			number_of_meals_flag;
+	uint64_t		number_of_philosophers;
+	uint64_t		time_to_die;
+	uint64_t		time_to_eat;
+	uint64_t		time_to_sleep;
+	uint64_t		required_number_of_meals;
+	t_flag_state	required_number_of_meals_flag;
 }	t_rule;
 
+// define shared_resources
 typedef struct s_shared_resources
 {
-	t_fork					*fork_arr;
-	t_finish_dinner_count	finish_dinner_count;
-	t_flag					start_flag;
-	t_time					start_time;
-	t_flag					dead_flag;
+	t_fork	*fork_arr;
+	t_flag	start_flag;
+	t_time	start_time;
+	t_flag	dead_flag;
+	t_count	finished_dining_count;
 }	t_shared_resources;
 
-typedef struct t_philosopher
+// define philo:thread
+typedef struct t_philo
 {
-	t_rule					rule;
-	pthread_t				thread;
-	uint64_t				number;
-	t_finish_dinner_count	*finish_dinner_count;
-	t_flag					*start_flag;
-	t_time					*start_time;
-	t_time					last_dinner_time;
-	t_flag					*dead_flag;
-	t_fork					*left_fork;
-	t_fork					*right_fork;
-}	t_philosopher;
-
-// utils
-uint64_t	ascii_to_ull(t_state *state, const char *str);
+	t_rule				rule;
+	t_shared_resources	*shared_resources;
+	uint64_t			number;
+	pthread_t			thread;
+	struct timeval		last_dining_time;
+	t_fork				*left_fork;
+	t_fork				*right_fork;
+}	t_philo;
 
 // init_rule
 void		init_rule(t_state *state, t_rule *rule, int argc, char **argv);
-void		init_number_of_philosophers(t_state *state, \
-								uint64_t *number_of_philosophers, char *arg);
-void		init_time_to_die(t_state *state, uint64_t *time_to_die, char *arg);
-void		init_time_to_eat(t_state *state, uint64_t *time_to_eat, char *arg);
-void		init_time_to_sleep(t_state *state, \
-										uint64_t *time_to_sleep, char *arg);
-void		init_number_of_meals(t_state *state, \
-										uint64_t *number_of_meals, char *arg);
 
-// init_forks
+// init_shared_resources
 void		init_shared_resources(t_state *state, \
-							t_rule *rule, t_shared_resources *shared_resources);
+							t_shared_resources *shared_resources, t_rule *rule);
 
-// init_philosopher_arr
-void		init_philosopher_arr(t_state *state, t_rule *rule, \
-		t_shared_resources *shared_resources, t_philosopher **philosopher_arr);
+// init_philo_arr
+void		init_philo_arr(t_state *state, t_philo **philo_arr, \
+							t_shared_resources *shared_resources, t_rule *rule);
 
 // create_threads
-void		create_threads(t_state *state, t_rule *rule, \
-		t_shared_resources *shared_resources, t_philosopher *philosopher_arr);
 
 // monitoring
-void		monitoring(t_state *state, t_rule *rule, \
-		t_shared_resources *shared_resources, t_philosopher *philosopher_arr);
 
-// join_thread
-void		join_thread(t_state *state, t_rule *rule, \
-												t_philosopher *philosopher_arr);
+// join_threads
+
+// clear
+
+// error
+void		error(t_state *state);
+
+// utils
+uint64_t	ascii_to_ull(t_state *state, const char *str);
 
 #endif
