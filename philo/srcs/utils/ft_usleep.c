@@ -1,26 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   eat.c                                              :+:      :+:    :+:   */
+/*   ft_usleep.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: minseok2 <minseok2@student.42seoul.kr      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/30 13:38:13 by minseok2          #+#    #+#             */
-/*   Updated: 2023/01/30 20:52:42 by minseok2         ###   ########.fr       */
+/*   Created: 2023/01/30 20:36:12 by minseok2          #+#    #+#             */
+/*   Updated: 2023/01/30 20:50:48 by minseok2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../includes/philo.h"
+#include "../../includes/philo.h"
 
-void	eat(t_philo *philosopher)
+static uint64_t	get_cur_ms_time(void)
 {
-	t_shared_resources	*shared_resources;
-	struct timeval		cur_time;
+	struct timeval	cur_time;
+	uint64_t		cur_ms_time;
 
-	shared_resources = philosopher->shared_resources;
 	gettimeofday(&cur_time, NULL);
-	philosopher->last_dining_time = cur_time;
-	print_message(get_timestamp(cur_time, &shared_resources->start_time), \
-			philosopher->number, "is eating", &shared_resources->printf_mutex);
-	ft_usleep(get_ms_time(cur_time), philosopher->rule.time_to_eat);
+	cur_ms_time = get_ms_time(cur_time);
+	return (cur_ms_time);
+}
+
+void	ft_usleep(uint64_t start_time, uint64_t usleep_time)
+{
+	uint64_t	time_limit;
+
+	time_limit = start_time + usleep_time;
+	while (get_cur_ms_time() < time_limit)
+		;
 }

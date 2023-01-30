@@ -6,7 +6,7 @@
 /*   By: minseok2 <minseok2@student.42seoul.kr      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/27 18:45:54 by minseok2          #+#    #+#             */
-/*   Updated: 2023/01/30 15:55:45 by minseok2         ###   ########.fr       */
+/*   Updated: 2023/01/30 21:19:14 by minseok2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ void	monitoring(t_state *state, t_rule *rule, \
 		if (is_dead_flag_on(shared_resources) || \
 									is_dining_finished(rule, shared_resources))
 			break ;
+		usleep(1000);
 	}
 	*state = JOIN_THREADS;
 }

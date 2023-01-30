@@ -6,7 +6,7 @@
 /*   By: minseok2 <minseok2@student.42seoul.kr      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/30 13:38:46 by minseok2          #+#    #+#             */
-/*   Updated: 2023/01/30 16:59:19 by minseok2         ###   ########.fr       */
+/*   Updated: 2023/01/30 21:45:22 by minseok2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,9 @@ static void	wait_both_available_forks(t_philo *philosopher)
 	while (1)
 	{
 		pthread_mutex_lock(&philosopher->left_fork->mutex);
+		printf("%lld philosopher left_fork locked\n", philosopher->number);
 		pthread_mutex_lock(&philosopher->right_fork->mutex);
+		printf("%lld philosopher right_fork locked\n", philosopher->number);
 		if (philosopher->left_fork->state == RELEASE && \
 				philosopher->right_fork->state == RELEASE)
 			break ;
