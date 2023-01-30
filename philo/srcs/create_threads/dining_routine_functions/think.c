@@ -1,19 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error.c                                            :+:      :+:    :+:   */
+/*   think.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: minseok2 <minseok2@student.42seoul.kr      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/27 14:10:41 by minseok2          #+#    #+#             */
-/*   Updated: 2023/01/27 14:11:15 by minseok2         ###   ########.fr       */
+/*   Created: 2023/01/30 13:39:13 by minseok2          #+#    #+#             */
+/*   Updated: 2023/01/30 15:32:23 by minseok2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/philo.h"
+#include "../../../includes/philo.h"
 
-void	error(t_state *state)
+void	think(t_philo *philosopher)
 {
-	printf("Error occurred\n");
-	*state = FINISH;
+	t_shared_resources	*shared_resources;
+	struct timeval		cur_time;
+
+	shared_resources = philosopher->shared_resources;
+	gettimeofday(&cur_time, NULL);
+	print_message(get_timestamp(cur_time, &shared_resources->start_time), \
+		philosopher->number, "is thinking", &shared_resources->printf_mutex);
 }

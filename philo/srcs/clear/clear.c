@@ -1,32 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   join_thread.c                                      :+:      :+:    :+:   */
+/*   clear.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: minseok2 <minseok2@student.42seoul.kr      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/19 19:39:22 by minseok2          #+#    #+#             */
-/*   Updated: 2023/01/20 14:44:13 by minseok2         ###   ########.fr       */
+/*   Created: 2023/01/30 09:59:06 by minseok2          #+#    #+#             */
+/*   Updated: 2023/01/30 10:06:32 by minseok2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/philo.h"
 
-void	join_thread(t_state *state, t_rule *rule, \
-												t_philosopher *philosopher_arr)
+void	clear_fork_arr(t_shared_resources *shared_resources)
 {
-	uint64_t	i;
-	int			ret;
+	
+}
 
-	i = 0;
-	while (i < rule->number_of_philosophers)
-	{
-		ret = pthread_join(philosopher_arr[i].thread, NULL);
-		if (ret != 0)
-		{
-			*state = ERROR;
-			return ;
-		}
-		i++;
-	}
+void	clear(t_state *state, t_rule *rule, \
+					t_shared_resources *shared_resources, t_philo *philo_arr)
+{
+	clear_fork_arr(shared_resources);
+	*state = FINISH;
 }

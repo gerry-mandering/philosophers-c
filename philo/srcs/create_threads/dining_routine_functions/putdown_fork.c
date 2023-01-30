@@ -1,19 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error.c                                            :+:      :+:    :+:   */
+/*   putdown_fork.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: minseok2 <minseok2@student.42seoul.kr      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/27 14:10:41 by minseok2          #+#    #+#             */
-/*   Updated: 2023/01/27 14:11:15 by minseok2         ###   ########.fr       */
+/*   Created: 2023/01/30 13:39:00 by minseok2          #+#    #+#             */
+/*   Updated: 2023/01/30 15:25:42 by minseok2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/philo.h"
+#include "../../../includes/philo.h"
 
-void	error(t_state *state)
+void	putdown_fork(t_philo *philosopher)
 {
-	printf("Error occurred\n");
-	*state = FINISH;
+	philosopher->left_fork->state = RELEASE;
+	philosopher->right_fork->state = RELEASE;
+	pthread_mutex_unlock(&philosopher->left_fork->mutex);
+	pthread_mutex_unlock(&philosopher->right_fork->mutex);
 }
