@@ -6,7 +6,7 @@
 /*   By: minseok2 <minseok2@student.42seoul.kr      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/27 17:11:09 by minseok2          #+#    #+#             */
-/*   Updated: 2023/01/27 18:37:48 by minseok2         ###   ########.fr       */
+/*   Updated: 2023/01/30 10:09:06 by minseok2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,8 @@ static void	assign_value(t_philo *philo_arr, \
 	}
 }
 
-void	init_philo_arr(t_state *state, t_philo **philo_arr, \
-							t_shared_resources *shared_resources, t_rule *rule)
+void	init_philo_arr(t_state *state, t_rule *rule, \
+					t_shared_resources *shared_resources, t_philo **philo_arr)
 {
 	*philo_arr = (t_philo *)malloc(sizeof(t_philo) * \
 												rule->number_of_philosophers);

@@ -6,7 +6,7 @@
 /*   By: minseok2 <minseok2@student.42seoul.kr      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/27 16:25:29 by minseok2          #+#    #+#             */
-/*   Updated: 2023/01/27 17:07:34 by minseok2         ###   ########.fr       */
+/*   Updated: 2023/01/30 13:33:52 by minseok2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,8 @@ static t_fork	*get_fork_arr(t_state *state, t_rule *rule)
 	return (fork_arr);
 }
 
-void	init_shared_resources(t_state *state, \
-							t_shared_resources *shared_resources, t_rule *rule)
+void	init_shared_resources(t_state *state, t_rule *rule, \
+										t_shared_resources *shared_resources)
 {
 	memset(shared_resources, 0, sizeof(t_shared_resources));
 	shared_resources->fork_arr = get_fork_arr(state, rule);
@@ -44,5 +44,6 @@ void	init_shared_resources(t_state *state, \
 	pthread_mutex_init(&shared_resources->start_time.mutex, NULL);
 	pthread_mutex_init(&shared_resources->dead_flag.mutex, NULL);
 	pthread_mutex_init(&shared_resources->finished_dining_count.mutex, NULL);
+	pthread_mutex_init(&shared_resources->printf_mutex, NULL);
 	*state = INIT_PHILO_ARR;
 }

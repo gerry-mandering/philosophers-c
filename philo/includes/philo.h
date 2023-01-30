@@ -6,7 +6,7 @@
 /*   By: minseok2 <minseok2@student.42seoul.kr      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/27 10:07:55 by minseok2          #+#    #+#             */
-/*   Updated: 2023/01/27 18:45:27 by minseok2         ###   ########.fr       */
+/*   Updated: 2023/01/30 13:59:21 by minseok2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ typedef struct s_time
 // define count with count value and mutex
 typedef struct s_count
 {
-	int				value;
+	uint64_t		value;
 	pthread_mutex_t	mutex;
 }	t_count;
 
@@ -91,11 +91,12 @@ typedef struct s_rule
 // define shared_resources
 typedef struct s_shared_resources
 {
-	t_fork	*fork_arr;
-	t_flag	start_flag;
-	t_time	start_time;
-	t_flag	dead_flag;
-	t_count	finished_dining_count;
+	t_fork			*fork_arr;
+	t_flag			start_flag;
+	t_time			start_time;
+	t_flag			dead_flag;
+	t_count			finished_dining_count;
+	pthread_mutex_t	printf_mutex;
 }	t_shared_resources;
 
 // define philo:thread
@@ -110,29 +111,58 @@ typedef struct t_philo
 	t_fork				*right_fork;
 }	t_philo;
 
+typedef enum e_dining_routine_index
+{
+	PICKUP_FORK,
+	EAT,
+	PUTDOWN_FORK,
+	GO_SLEEP,
+	THINK
+}	t_dining_routine_index;
+
+typedef void	(*t_dining_routine_fp)(t_philo *philosopher);
+
 // init_rule
 void		init_rule(t_state *state, t_rule *rule, int argc, char **argv);
 
 // init_shared_resources
-void		init_shared_resources(t_state *state, \
-							t_shared_resources *shared_resources, t_rule *rule);
+void		init_shared_resources(t_state *state, t_rule *rule, \
+										t_shared_resources *shared_resources);
 
 // init_philo_arr
-void		init_philo_arr(t_state *state, t_philo **philo_arr, \
-							t_shared_resources *shared_resources, t_rule *rule);
+void		init_philo_arr(t_state *state, t_rule *rule, \
+					t_shared_resources *shared_resources, t_philo **philo_arr);
 
 // create_threads
+void		create_threads(t_state *state, t_rule *rule, t_philo *philo_arr);
+void		*dining_routine(void *philo);
+
+// dining_routine_functions
+void		pickup_fork(t_philo *philosopher);
+void		putdown_fork(t_philo *philosopher);
+void		eat(t_philo *philosopher);
+void		go_sleep(t_philo *philosopher);
+void		think(t_philo *philosopher);
 
 // monitoring
+void		monitoring(t_state *state, t_rule *rule, \
+										t_shared_resources *shared_resources);
+int			is_dead_flag_on(t_shared_resources *shared_resources);
 
 // join_threads
+void		join_threads(t_state *state, t_rule *rule, t_philo *philo_arr);
 
 // clear
+void		clear(t_state *state, t_rule *rule, \
+					t_shared_resources *shared_resources, t_philo *philo_arr);
 
 // error
 void		error(t_state *state);
 
 // utils
 uint64_t	ascii_to_ull(t_state *state, const char *str);
+void		print_message(uint64_t timestamp, uint64_t number, \
+								const char *msg, pthread_mutex_t *printf_mutex);
+uint64_t	get_timestamp(struct timeval cur_time, t_time *start_time);
 
 #endif

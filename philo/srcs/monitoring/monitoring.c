@@ -6,7 +6,7 @@
 /*   By: minseok2 <minseok2@student.42seoul.kr      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/27 18:45:54 by minseok2          #+#    #+#             */
-/*   Updated: 2023/01/27 20:43:56 by minseok2         ###   ########.fr       */
+/*   Updated: 2023/01/30 15:55:45 by minseok2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,26 +15,39 @@
 static void	start_dining(t_shared_resources *shared_resources)
 {
 	pthread_mutex_lock(&shared_resources->start_flag.mutex);
+	pthread_mutex_lock(&shared_resources->start_time.mutex);
 	shared_resources->start_flag.state = ON;
+	gettimeofday(&shared_resources->start_time.value, NULL);
 	pthread_mutex_unlock(&shared_resources->start_flag.mutex);
+	pthread_mutex_unlock(&shared_resources->start_time.mutex);
 }
 
 int	is_dead_flag_on(t_shared_resources *shared_resources)
 {
-	t_flag_state	flag;
+	t_flag_state	dead_flag;
 
 	pthread_mutex_lock(&shared_resources->dead_flag.mutex);
 	if (shared_resources->dead_flag.state == ON)
-		flag = ON;
+		dead_flag = ON;
 	else
-		flag = OFF;
+		dead_flag = OFF;
 	pthread_mutex_unlock(&shared_resources->dead_flag.mutex);
-	return (flag);
+	return (dead_flag);
 }
 
-int	is_dining_finished(t_rule *rule, t_shared_resources *shared_resources)
+static int	is_dining_finished(t_rule *rule, \
+									t_shared_resources *shared_resources)
 {
-	
+	t_flag_state	dining_finished_flag;
+
+	pthread_mutex_lock(&shared_resources->finished_dining_count.mutex);
+	if (shared_resources->finished_dining_count.value == \
+											rule->number_of_philosophers)
+		dining_finished_flag = ON;
+	else
+		dining_finished_flag = OFF;
+	pthread_mutex_unlock(&shared_resources->finished_dining_count.mutex);
+	return (dining_finished_flag);
 }
 
 void	monitoring(t_state *state, t_rule *rule, \

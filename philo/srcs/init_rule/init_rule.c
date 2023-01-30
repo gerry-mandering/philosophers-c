@@ -6,7 +6,7 @@
 /*   By: minseok2 <minseok2@student.42seoul.kr      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/27 16:10:58 by minseok2          #+#    #+#             */
-/*   Updated: 2023/01/27 17:02:00 by minseok2         ###   ########.fr       */
+/*   Updated: 2023/01/30 16:57:28 by minseok2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,5 +43,6 @@ void	init_rule(t_state *state, t_rule *rule, int argc, char **argv)
 		*state = ERROR;
 		return ;
 	}
-	*state = INIT_SHARED_RESOURCES;
+	if (*state != ERROR)
+		*state = INIT_SHARED_RESOURCES;
 }
