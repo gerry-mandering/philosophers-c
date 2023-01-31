@@ -6,7 +6,7 @@
 /*   By: minseok2 <minseok2@student.42seoul.kr      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/30 11:14:20 by minseok2          #+#    #+#             */
-/*   Updated: 2023/01/30 21:00:23 by minseok2         ###   ########.fr       */
+/*   Updated: 2023/01/31 13:07:29 by minseok2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,8 @@ void	*dining_routine(void *philo)
 	wait_for_dining_start(philosopher->shared_resources);
 	init_last_dining_time(philosopher);
 	fp_index = PICKUP_FORK;
+	if (philosopher->number % 2 == 0)
+		usleep(100);
 	while (!is_dead_flag_on(philosopher->shared_resources) && \
 			!is_philosopher_dead(philosopher))
 	{

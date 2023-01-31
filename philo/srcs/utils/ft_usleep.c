@@ -6,13 +6,13 @@
 /*   By: minseok2 <minseok2@student.42seoul.kr      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/30 20:36:12 by minseok2          #+#    #+#             */
-/*   Updated: 2023/01/30 20:50:48 by minseok2         ###   ########.fr       */
+/*   Updated: 2023/01/31 13:18:40 by minseok2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/philo.h"
 
-static uint64_t	get_cur_ms_time(void)
+uint64_t	get_cur_ms_time(void)
 {
 	struct timeval	cur_time;
 	uint64_t		cur_ms_time;
@@ -28,5 +28,5 @@ void	ft_usleep(uint64_t start_time, uint64_t usleep_time)
 
 	time_limit = start_time + usleep_time;
 	while (get_cur_ms_time() < time_limit)
-		;
+		usleep(300);
 }

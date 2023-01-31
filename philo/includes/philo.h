@@ -6,7 +6,7 @@
 /*   By: minseok2 <minseok2@student.42seoul.kr      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/27 10:07:55 by minseok2          #+#    #+#             */
-/*   Updated: 2023/01/30 20:51:04 by minseok2         ###   ########.fr       */
+/*   Updated: 2023/01/31 12:47:20 by minseok2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,6 +164,7 @@ uint64_t	ascii_to_ull(t_state *state, const char *str);
 void		print_message(uint64_t timestamp, uint64_t number, \
 								const char *msg, pthread_mutex_t *printf_mutex);
 uint64_t	get_ms_time(struct timeval time);
+uint64_t	get_cur_ms_time(void);
 uint64_t	get_timestamp(struct timeval cur_time, t_time *start_time);
 void		ft_usleep(uint64_t start_time, uint64_t usleep_time);
 
