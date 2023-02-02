@@ -6,11 +6,12 @@
 /*   By: minseok2 <minseok2@student.42seoul.kr      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/01 09:45:24 by minseok2          #+#    #+#             */
-/*   Updated: 2023/02/01 16:10:28 by minseok2         ###   ########.fr       */
+/*   Updated: 2023/02/02 16:37:58 by minseok2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
+#include <pthread.h>
 
 int	main(int argc, char **argv)
 {
@@ -30,7 +31,10 @@ int	main(int argc, char **argv)
 		else if (state == INIT_PHILO_ARR)
 			init_philo_arr(&state, &rule, &shared_resource, &philo_arr);
 		else if (state == CREATE_THREAD)
+		{
+			pthread_mutex_lock(&shared_resource.start_mutex);
 			create_thread(&state, &rule, philo_arr, &tid_arr);
+		}
 		else if (state == MONITORING)
 			monitoring(&state, &rule, &shared_resource);
 		else if (state == JOIN_THREAD)

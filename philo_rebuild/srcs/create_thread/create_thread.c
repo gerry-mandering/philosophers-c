@@ -6,11 +6,12 @@
 /*   By: minseok2 <minseok2@student.42seoul.kr      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/01 16:16:00 by minseok2          #+#    #+#             */
-/*   Updated: 2023/02/01 18:04:53 by minseok2         ###   ########.fr       */
+/*   Updated: 2023/02/02 20:33:09 by minseok2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/philo.h"
+#include <pthread.h>
 
 // function declaration
 static void	allocate_tid_arr(enum e_state *state, \
@@ -29,11 +30,11 @@ void	create_thread(enum e_state *state, \
 	i = 0;
 	while (i < rule->number_of_philosophers)
 	{
-		if (philo_arr[i].number % 2 == 0)
-			ret = pthread_create(tid_arr[i], NULL, \
+		//if (philo_arr[i].number % 2 == 0)
+			ret = pthread_create(&(*tid_arr)[i], NULL, \
 											even_dining_routine, &philo_arr[i]);
-		else
-			ret = pthread_create(tid_arr[i], NULL, \
+		//else
+		//	ret = pthread_create(&(*tid_arr)[i], NULL, \
 											odd_dining_routine, &philo_arr[i]);
 		if (ret != 0)
 		{

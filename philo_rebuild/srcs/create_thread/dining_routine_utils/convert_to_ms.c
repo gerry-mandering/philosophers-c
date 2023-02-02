@@ -1,31 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   is_dining_finished.c                               :+:      :+:    :+:   */
+/*   convert_to_ms.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: minseok2 <minseok2@student.42seoul.kr      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/01 19:35:19 by minseok2          #+#    #+#             */
-/*   Updated: 2023/02/02 20:06:38 by minseok2         ###   ########.fr       */
+/*   Created: 2023/02/02 12:58:09 by minseok2          #+#    #+#             */
+/*   Updated: 2023/02/02 13:00:50 by minseok2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/philo.h"
 
-int	is_dining_finished(t_rule *rule, t_shared_resource *shared_resource)
+uint64_t	convert_to_ms(t_timeval time)
 {
-	t_count	*finished_dining_count;
+	uint64_t	millisecond;
 
-	finished_dining_count = &shared_resource->finished_dining_count;
-	pthread_mutex_lock(&finished_dining_count->mutex);
-	if (finished_dining_count->value == rule->number_of_philosophers)
-	{
-		pthread_mutex_unlock(&finished_dining_count->mutex);
-		return (1);
-	}
-	else
-	{
-		pthread_mutex_unlock(&finished_dining_count->mutex);
-		return (0);
-	}
+	millisecond = (time.tv_sec * 1000) + (time.tv_usec / 1000);
+	return (millisecond);
 }

@@ -1,31 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   is_dining_finished.c                               :+:      :+:    :+:   */
+/*   ft_usleep.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: minseok2 <minseok2@student.42seoul.kr      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/01 19:35:19 by minseok2          #+#    #+#             */
-/*   Updated: 2023/02/02 20:06:38 by minseok2         ###   ########.fr       */
+/*   Created: 2023/02/02 13:37:42 by minseok2          #+#    #+#             */
+/*   Updated: 2023/02/02 20:29:12 by minseok2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/philo.h"
 
-int	is_dining_finished(t_rule *rule, t_shared_resource *shared_resource)
+void	ft_usleep(t_timeval start_time, uint64_t millisecond)
 {
-	t_count	*finished_dining_count;
+	uint64_t	time_limit;
+	t_timeval	current_time;
 
-	finished_dining_count = &shared_resource->finished_dining_count;
-	pthread_mutex_lock(&finished_dining_count->mutex);
-	if (finished_dining_count->value == rule->number_of_philosophers)
+	time_limit = convert_to_ms(start_time) + millisecond;
+	while (1)
 	{
-		pthread_mutex_unlock(&finished_dining_count->mutex);
-		return (1);
-	}
-	else
-	{
-		pthread_mutex_unlock(&finished_dining_count->mutex);
-		return (0);
+		gettimeofday(&current_time, NULL);
+		if (convert_to_ms(current_time) > time_limit)
+			break ;
+		usleep(200);
 	}
 }

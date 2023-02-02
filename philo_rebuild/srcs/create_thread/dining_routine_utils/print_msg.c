@@ -1,31 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   is_dining_finished.c                               :+:      :+:    :+:   */
+/*   print_msg.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: minseok2 <minseok2@student.42seoul.kr      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/01 19:35:19 by minseok2          #+#    #+#             */
-/*   Updated: 2023/02/02 20:06:38 by minseok2         ###   ########.fr       */
+/*   Created: 2023/02/02 13:28:53 by minseok2          #+#    #+#             */
+/*   Updated: 2023/02/02 16:38:13 by minseok2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/philo.h"
 
-int	is_dining_finished(t_rule *rule, t_shared_resource *shared_resource)
+void	print_msg(t_philo *philo, t_timeval current_time, const char *msg)
 {
-	t_count	*finished_dining_count;
+	uint64_t	start_ms_time;
+	uint64_t	current_ms_time;
+	uint64_t	time_diff;
 
-	finished_dining_count = &shared_resource->finished_dining_count;
-	pthread_mutex_lock(&finished_dining_count->mutex);
-	if (finished_dining_count->value == rule->number_of_philosophers)
-	{
-		pthread_mutex_unlock(&finished_dining_count->mutex);
-		return (1);
-	}
-	else
-	{
-		pthread_mutex_unlock(&finished_dining_count->mutex);
-		return (0);
-	}
+	start_ms_time = convert_to_ms(philo->shared_resource->start_time);
+	current_ms_time = convert_to_ms(current_time);
+	time_diff = current_ms_time - start_ms_time;
+	printf("%llu %llu %s\n", time_diff, philo->number, msg);
 }

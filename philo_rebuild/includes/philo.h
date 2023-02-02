@@ -6,7 +6,7 @@
 /*   By: minseok2 <minseok2@student.42seoul.kr      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/01 09:09:54 by minseok2          #+#    #+#             */
-/*   Updated: 2023/02/01 20:19:23 by minseok2         ###   ########.fr       */
+/*   Updated: 2023/02/02 18:55:35 by minseok2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ enum e_flag_state
 
 typedef struct s_flag
 {
-	enum e_fork_state	state;
+	enum e_flag_state	state;
 	pthread_mutex_t		mutex;
 }	t_flag;
 
@@ -148,12 +148,17 @@ int			go_sleep(t_philo *philo);
 int			think(t_philo *philo);
 
 // dining_routine_utils
-void		wait_for_dining_to_start(pthread_mutex_t *start_mutex);
+void		wait_for_dining_to_start(t_shared_resource *shared_resource);
+int			is_philosopher_dead(t_philo *philo, t_timeval current_time);
+void		raise_dead_flag(t_philo *philo, t_timeval current_time);
 int			is_dead_flag_on(t_shared_resource *shared_resource);
 int			is_dining_finished(t_rule *rule, \
 											t_shared_resource *shared_resource);
 int			is_holding_fork(enum e_dining_state dining_state);
 void		return_fork_back(enum e_dining_state dining_state, t_philo *philo);
+uint64_t	convert_to_ms(t_timeval time);
+void		ft_usleep(t_timeval start_time, uint64_t millisecond);
+void		print_msg(t_philo *philo, t_timeval current_time, const char *msg);
 
 // monitoring
 void		monitoring(enum e_state *state, \
