@@ -12,7 +12,7 @@
 
 #include "../../includes/philo.h"
 
-void	*ft_malloc(enum e_state *state, size_t size)
+void	*ft_malloc(enum e_state *state, uint64_t size)
 {
 	void	*ptr;
 

@@ -6,7 +6,7 @@
 /*   By: minseok2 <minseok2@student.42seoul.kr      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/01 16:27:40 by minseok2          #+#    #+#             */
-/*   Updated: 2023/02/02 20:32:52 by minseok2         ###   ########.fr       */
+/*   Updated: 2023/02/03 14:43:08 by minseok2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,6 @@ void	*even_dining_routine(void *_philo)
 	philo = (t_philo *)_philo;
 	wait_for_dining_to_start(philo->shared_resource);
 	init(philo, &dining_state, &break_flag);
-	if (philo->number % 2 == 0)
-		usleep(10000);
 	while (1)
 	{
 		break_flag = dining_routine_fp[dining_state](philo);
@@ -58,6 +56,7 @@ void	*odd_dining_routine(void *_philo)
 	philo = (t_philo *)_philo;
 	wait_for_dining_to_start(philo->shared_resource);
 	init(philo, &dining_state, &break_flag);
+	usleep(3000);
 	while (1)
 	{
 		break_flag = dining_routine_fp[dining_state](philo);

@@ -172,7 +172,7 @@ void		error(enum e_state *state);
 
 // utils
 uint64_t	ascii_to_ull(enum e_state *state, const char *str);
-void		*ft_malloc(enum e_state *state, size_t size);
+void		*ft_malloc(enum e_state *state, uint64_t size);
 int			ft_pthread_mutex_init(enum e_state *state, \
 					pthread_mutex_t *mutex, const pthread_mutexattr_t *attr);
 
