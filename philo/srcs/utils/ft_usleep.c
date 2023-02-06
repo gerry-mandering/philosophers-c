@@ -5,28 +5,27 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: minseok2 <minseok2@student.42seoul.kr      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/30 20:36:12 by minseok2          #+#    #+#             */
-/*   Updated: 2023/01/31 13:18:40 by minseok2         ###   ########.fr       */
+/*   Created: 2023/02/03 20:08:19 by minseok2          #+#    #+#             */
+/*   Updated: 2023/02/06 18:01:52 by minseok2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/philo.h"
 
-uint64_t	get_cur_ms_time(void)
+void	ft_usleep(uint64_t start_ms_time, uint64_t millisecond)
 {
-	struct timeval	cur_time;
-	uint64_t		cur_ms_time;
+	t_timeval	current_time;
+	uint64_t	current_ms_time;
+	uint64_t	end_time;
 
-	gettimeofday(&cur_time, NULL);
-	cur_ms_time = get_ms_time(cur_time);
-	return (cur_ms_time);
-}
-
-void	ft_usleep(uint64_t start_time, uint64_t usleep_time)
-{
-	uint64_t	time_limit;
-
-	time_limit = start_time + usleep_time;
-	while (get_cur_ms_time() < time_limit)
-		usleep(300);
+	end_time = start_ms_time + millisecond;
+	while (true)
+	{
+		gettimeofday(&current_time, NULL);
+		current_ms_time = convert_to_ms_time(current_time);
+		if (current_ms_time > end_time)
+			break ;
+		if (current_ms_time < start_ms_time + (millisecond * 0.9))
+			usleep(300);
+	}
 }

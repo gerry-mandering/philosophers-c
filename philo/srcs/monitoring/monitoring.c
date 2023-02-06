@@ -5,61 +5,73 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: minseok2 <minseok2@student.42seoul.kr      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/27 18:45:54 by minseok2          #+#    #+#             */
-/*   Updated: 2023/01/31 12:24:03 by minseok2         ###   ########.fr       */
+/*   Created: 2023/02/06 10:03:45 by minseok2          #+#    #+#             */
+/*   Updated: 2023/02/06 18:07:38 by minseok2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/philo.h"
 
-static void	start_dining(t_shared_resources *shared_resources)
+static bool	is_philo_died(t_rule rule, t_philo *philo_arr, t_flag *break_flag)
 {
-	pthread_mutex_lock(&shared_resources->start_flag.mutex);
-	pthread_mutex_lock(&shared_resources->start_time.mutex);
-	shared_resources->start_flag.state = ON;
-	gettimeofday(&shared_resources->start_time.value, NULL);
-	pthread_mutex_unlock(&shared_resources->start_flag.mutex);
-	pthread_mutex_unlock(&shared_resources->start_time.mutex);
-}
+	uint64_t	dining_term;
+	uint64_t	i;
 
-int	is_dead_flag_on(t_shared_resources *shared_resources)
-{
-	t_flag_state	dead_flag;
-
-	pthread_mutex_lock(&shared_resources->dead_flag.mutex);
-	if (shared_resources->dead_flag.state == ON)
-		dead_flag = ON;
-	else
-		dead_flag = OFF;
-	pthread_mutex_unlock(&shared_resources->dead_flag.mutex);
-	return (dead_flag);
-}
-
-static int	is_dining_finished(t_rule *rule, \
-									t_shared_resources *shared_resources)
-{
-	t_flag_state	dining_finished_flag;
-
-	pthread_mutex_lock(&shared_resources->finished_dining_count.mutex);
-	if (shared_resources->finished_dining_count.value == \
-											rule->number_of_philosophers)
-		dining_finished_flag = ON;
-	else
-		dining_finished_flag = OFF;
-	pthread_mutex_unlock(&shared_resources->finished_dining_count.mutex);
-	return (dining_finished_flag);
-}
-
-void	monitoring(t_state *state, t_rule *rule, \
-										t_shared_resources *shared_resources)
-{
-	start_dining(shared_resources);
-	while (1)
+	i = 0;
+	while (i < rule.number_of_philosophers)
 	{
-		if (is_dead_flag_on(shared_resources) || \
-									is_dining_finished(rule, shared_resources))
-			break ;
-		usleep(1000);
+		pthread_mutex_lock(&philo_arr[i].dining_time.mutex);
+		dining_term = get_current_time() - philo_arr[i].dining_time.value;
+		pthread_mutex_unlock(&philo_arr[i].dining_time.mutex);
+		if (dining_term > rule.time_to_die)
+		{
+			pthread_mutex_lock(&break_flag->mutex);
+			break_flag->state = true;
+			print_msg(&philo_arr[i], get_current_time(), "died");
+			pthread_mutex_unlock(&break_flag->mutex);
+			return (true);
+		}
+		i++;
 	}
-	*state = JOIN_THREADS;
+	return (false);
+}
+
+static bool	is_dining_finished(t_rule rule, \
+								t_philo *philo_arr, t_flag *break_flag)
+{
+	uint64_t	dining_finished_philo_count;
+	uint64_t	i;
+
+	dining_finished_philo_count = 0;
+	i = 0;
+	while (i < rule.number_of_philosophers)
+	{
+		pthread_mutex_lock(&philo_arr[i].dining_count.mutex);
+		if (philo_arr[i].dining_count.value >= rule.required_meal_count)
+			dining_finished_philo_count++;
+		pthread_mutex_unlock(&philo_arr[i].dining_count.mutex);
+		i++;
+	}
+	if (dining_finished_philo_count == rule.number_of_philosophers)
+	{
+		pthread_mutex_lock(&break_flag->mutex);
+		break_flag->state = true;
+		pthread_mutex_unlock(&break_flag->mutex);
+		return (true);
+	}
+	return (false);
+}
+
+void	monitoring(t_state *state, t_data *data)
+{
+	ft_usleep(get_current_time(), data->rule.time_to_die * 0.7);
+	while (true)
+	{
+		if (is_philo_died(data->rule, data->philo_arr, &data->break_flag))
+			break ;
+		else if (data->rule.required_meal_flag && \
+			is_dining_finished(data->rule, data->philo_arr, &data->break_flag))
+			break ;
+	}
+	*state = JOIN_THREAD;
 }

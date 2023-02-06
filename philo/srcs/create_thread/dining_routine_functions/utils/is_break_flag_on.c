@@ -1,19 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error.c                                            :+:      :+:    :+:   */
+/*   is_break_flag_on.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: minseok2 <minseok2@student.42seoul.kr      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/06 09:42:30 by minseok2          #+#    #+#             */
-/*   Updated: 2023/02/06 09:43:03 by minseok2         ###   ########.fr       */
+/*   Created: 2023/02/06 13:36:31 by minseok2          #+#    #+#             */
+/*   Updated: 2023/02/06 18:04:44 by minseok2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/philo.h"
+#include "../../../../includes/philo.h"
 
-void	error(t_state *state)
+bool	is_break_flag_on(t_flag *break_flag)
 {
-	printf("Error occurred\n");
-	*state = FINISH;
+	pthread_mutex_lock(&break_flag->mutex);
+	if (break_flag->state)
+	{
+		pthread_mutex_unlock(&break_flag->mutex);
+		return (true);
+	}
+	else
+		return (false);
 }

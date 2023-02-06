@@ -5,16 +5,16 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: minseok2 <minseok2@student.42seoul.kr      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/27 16:22:09 by minseok2          #+#    #+#             */
-/*   Updated: 2023/01/27 16:23:09 by minseok2         ###   ########.fr       */
+/*   Created: 2023/02/01 11:46:22 by minseok2          #+#    #+#             */
+/*   Updated: 2023/02/06 13:57:25 by minseok2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/philo.h"
 
-static int	ft_strlen(const char *str)
+static uint64_t	ft_strlen(const char *str)
 {
-	int	length;
+	uint64_t	length;
 
 	length = 0;
 	while (str[length])
@@ -22,7 +22,7 @@ static int	ft_strlen(const char *str)
 	return (length);
 }
 
-static int	is_digit(const char character)
+static int	is_digit(char character)
 {
 	if (character >= '0' && character <= '9')
 		return (1);
@@ -30,25 +30,44 @@ static int	is_digit(const char character)
 		return (0);
 }
 
-static uint64_t	make_number(t_state *state, const char *str, int i)
+static int	is_overflowed(uint64_t number, const char *str, uint64_t i)
 {
-	uint64_t	number;
+	const uint64_t	cutoff = UINT64_MAX / 10;
+	const int		cutlim = UINT64_MAX % 10;
 
-	if (str[i] == '\0')
+	if (number > cutoff && i != ft_strlen(str) - 1)
+		return (1);
+	else if (number == cutoff && i != ft_strlen(str) - 1 && \
+											str[i + 1] - '0' > cutlim)
+		return (1);
+	else
 		return (0);
-	if (!is_digit(str[i]))
-	{
-		*state = ERROR;
-		return (0);
-	}
-	number = str[i] - '0';
-	return (number + (10 * make_number(state, str, --i)));
 }
 
-uint64_t	ascii_to_ull(t_state *state, const char *str)
+uint64_t	ascii_to_ull(enum e_state *state, const char *str)
 {
-	uint64_t	number;
+	uint64_t		number;
+	uint64_t		i;
 
-	number = make_number(state, str, ft_strlen(str) - 1);
+	number = 0;
+	i = 0;
+	while (i < ft_strlen(str))
+	{
+		if (!is_digit(str[i]))
+		{
+			*state = ERROR;
+			return (0);
+		}
+		number *= 10;
+		number += str[i] - '0';
+		if (is_overflowed(number, str, i))
+		{
+			*state = ERROR;
+			return (UINT64_MAX);
+		}
+		i++;
+	}
+	if (number == 0)
+		*state = ERROR;
 	return (number);
 }
