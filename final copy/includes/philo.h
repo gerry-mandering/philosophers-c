@@ -6,7 +6,7 @@
 /*   By: minseok2 <minseok2@student.42seoul.kr      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/03 15:15:47 by minseok2          #+#    #+#             */
-/*   Updated: 2023/02/05 22:26:44 by minseok2         ###   ########.fr       */
+/*   Updated: 2023/02/06 04:59:27 by minseok2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,6 @@ typedef struct s_shared_data
 	t_flag			break_flag;
 	pthread_mutex_t	start_mutex;
 	uint64_t		start_ms_time;
-	pthread_mutex_t	print_mutex;
 }	t_shared_data;
 
 typedef struct s_philo

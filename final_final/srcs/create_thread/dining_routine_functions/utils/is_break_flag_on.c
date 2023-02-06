@@ -1,21 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   print_msg.c                                        :+:      :+:    :+:   */
+/*   is_break_flag_on.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: minseok2 <minseok2@student.42seoul.kr      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/03 19:55:21 by minseok2          #+#    #+#             */
-/*   Updated: 2023/02/05 13:37:08 by minseok2         ###   ########.fr       */
+/*   Created: 2023/02/06 13:36:31 by minseok2          #+#    #+#             */
+/*   Updated: 2023/02/06 13:37:52 by minseok2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/philo.h"
+#include "../../../../includes/philo.h"
 
-void	print_msg(t_philo *philo, uint64_t current_ms_time, const char *msg)
+bool	is_break_flag_on(t_flag *break_flag)
 {
-	uint64_t	time_diff;
-
-	time_diff = current_ms_time - philo->shared_data->start_ms_time;
-	printf("%llu %llu %s\n", time_diff, philo->number, msg);
+	pthread_mutex_lock(&break_flag->mutex);
+	if (break_flag->state == true)
+	{
+		pthread_mutex_unlock(&break_flag->mutex);
+		return (true);
+	}
+	else
+		return (false);
 }

@@ -6,7 +6,7 @@
 /*   By: minseok2 <minseok2@student.42seoul.kr      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/03 18:45:40 by minseok2          #+#    #+#             */
-/*   Updated: 2023/02/05 22:26:56 by minseok2         ###   ########.fr       */
+/*   Updated: 2023/02/06 05:09:46 by minseok2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	init_shared_data(t_state *state, t_shared_data *shared_data)
 	shared_data->break_flag.state = false;
 	ft_pthread_mutex_init(state, &shared_data->break_flag.mutex, NULL);
 	ft_pthread_mutex_init(state, &shared_data->start_mutex, NULL);
-	ft_pthread_mutex_init(state, &shared_data->print_mutex, NULL);
+	//ft_pthread_mutex_init(state, &shared_data->print_mutex, NULL);
 }
 
 void	init_fork_arr(t_state *state, t_data *data)

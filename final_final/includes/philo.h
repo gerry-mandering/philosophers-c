@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: minseok2 <minseok2@student.42seoul.kr      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/03 15:15:47 by minseok2          #+#    #+#             */
-/*   Updated: 2023/02/05 22:26:44 by minseok2         ###   ########.fr       */
+/*   Created: 2023/02/06 08:19:17 by minseok2          #+#    #+#             */
+/*   Updated: 2023/02/06 16:01:46 by minseok2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,13 @@ typedef struct timeval	t_timeval;
 typedef enum e_state
 {
 	INIT,
+	INIT_RULE,
+	INIT_BREAK_FLAG,
+	INIT_START_MUTEX,
+	INIT_FORK_ARR,
+	INIT_PHILO_ARR,
+	INIT_TID_ARR,
+	FINISH_INIT,
 	CREATE_THREAD,
 	MONITORING,
 	JOIN_THREAD,
@@ -52,12 +59,17 @@ typedef struct s_flag
 	pthread_mutex_t	mutex;
 }	t_flag;
 
-typedef struct s_dining_info
+typedef struct s_time
 {
-	uint64_t		last_dining_time;
-	uint64_t		dining_count;
+	uint64_t		value;
 	pthread_mutex_t	mutex;
-}	t_dining_info;
+}	t_time;
+
+typedef struct s_count
+{
+	uint64_t		value;
+	pthread_mutex_t	mutex;
+}	t_count;
 
 typedef struct s_rule
 {
@@ -69,31 +81,28 @@ typedef struct s_rule
 	uint64_t	required_meal_count;
 }	t_rule;
 
-typedef struct s_shared_data
-{
-	t_flag			break_flag;
-	pthread_mutex_t	start_mutex;
-	uint64_t		start_ms_time;
-	pthread_mutex_t	print_mutex;
-}	t_shared_data;
-
 typedef struct s_philo
 {
 	uint64_t		number;
 	t_rule			rule;
-	t_shared_data	*shared_data;
+	pthread_mutex_t	*start_mutex;
+	uint64_t		*start_time;
+	t_time			dining_time;
+	t_count			dining_count;
+	t_flag			*break_flag;
 	t_fork			*left_fork;
 	t_fork			*right_fork;
-	t_dining_info	dining_info;
 }	t_philo;
 
 typedef struct s_data
 {
 	t_rule			rule;
-	t_shared_data	shared_data;
 	t_fork			*fork_arr;
 	t_philo			*philo_arr;
 	pthread_t		*tid_arr;
+	t_flag			break_flag;
+	pthread_mutex_t	start_mutex;
+	uint64_t		start_time;
 }	t_data;
 
 typedef enum e_dining_state
@@ -105,53 +114,60 @@ typedef enum e_dining_state
 	PUTDOWN_RIGHT_FORK,
 	GO_SLEEP,
 	THINK,
-	BREAK
+	FINISH_DINING
 }	t_dining_state;
 
 typedef void			(*t_dining_routine_fp)(t_dining_state *dining_state, \
 												t_philo *philo);
 
 //init
-void		init(t_state *state, t_data *data, int argc, char **argv);
+void			init(t_state *state, t_data *data, int argc, char **argv);
 
 //init_functions
-void		init_rule(t_state *state, t_rule *rule, int argc, char **argv);
-void		init_shared_data(t_state *state, t_shared_data *shared_data);
-void		init_fork_arr(t_state *state, t_data *data);
-void		init_philo_arr(t_state *state, t_data *data);
-void		init_tid_arr(t_state *state, t_data *data);
+t_rule			init_rule(t_state *state, int argc, char **argv);
+t_flag			init_break_flag(t_state *state);
+pthread_mutex_t	init_start_mutex(t_state *state);
+t_fork			*init_fork_arr(t_state *state, t_rule rule);
+t_philo			*init_philo_arr(t_state *state, t_data *data);
+pthread_t		*init_tid_arr(t_state *state, t_data *data);
 
 //create_thread
-void		create_thread(t_state *state, t_data *data);
+void			create_thread(t_state *state, t_data *data);
 
 //dining_routine
-void		*dining_routine(void *_philo);
+void			*dining_routine(void *_philo);
 
 //dining_routine_functions
-void		pickup_left_fork(t_dining_state *dining_state, t_philo *philo);
-void		pickup_right_fork(t_dining_state *dining_state, t_philo *philo);
-void		eat(t_dining_state *dining_state, t_philo *philo);
-void		putdown_left_fork(t_dining_state *dining_state, t_philo *philo);
-void		putdown_right_fork(t_dining_state *dining_state, t_philo *philo);
-void		go_sleep(t_dining_state *dining_state, t_philo *philo);
-void		think(t_dining_state *dining_state, t_philo *philo);
+void			pickup_left_fork(t_dining_state *dining_state, t_philo *philo);
+void			pickup_right_fork(t_dining_state *dining_state, t_philo *philo);
+void			eat(t_dining_state *dining_state, t_philo *philo);
+void			putdown_left_fork(t_dining_state *dining_state, t_philo *philo);
+void			putdown_right_fork(t_dining_state *dining_state, \
+																t_philo *philo);
+void			go_sleep(t_dining_state *dining_state, t_philo *philo);
+void			think(t_dining_state *dining_state, t_philo *philo);
+
+//dining_routine_functions utils
+bool			is_break_flag_on(t_flag *break_flag);
 
 //monitoring
-void		monitoring(t_state *state, t_data *data);
+void			monitoring(t_state *state, t_data *data);
 
 //join_thread
-void		join_thread(t_state *state, t_data *data);
+void			join_thread(t_state *state, t_data *data);
 
 //error
-void		error(t_state *state);
+void			error(t_state *state);
 
 //utils
-uint64_t	ascii_to_ull(t_state *state, const char *str);
-void		*ft_malloc(t_state *state, uint64_t size);
-int			ft_pthread_mutex_init(t_state *state, \
+uint64_t		ascii_to_ull(t_state *state, const char *str);
+void			*ft_malloc(t_state *state, uint64_t size);
+int				ft_pthread_mutex_init(t_state *state, \
 					pthread_mutex_t *mutex, const pthread_mutexattr_t *attr);
-uint64_t	convert_to_ms_time(t_timeval time);
-void		print_msg(t_philo *philo, uint64_t current_time, const char *msg);
-void		ft_usleep(uint64_t start_ms_time, uint64_t millisecond);
+uint64_t		convert_to_ms_time(t_timeval time);
+uint64_t		get_current_time(void);
+void			print_msg(t_philo *philo, \
+									uint64_t current_time, const char *msg);
+void			ft_usleep(uint64_t start_ms_time, uint64_t millisecond);
 
 #endif

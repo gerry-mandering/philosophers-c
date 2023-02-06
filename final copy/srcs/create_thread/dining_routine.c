@@ -6,12 +6,11 @@
 /*   By: minseok2 <minseok2@student.42seoul.kr      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/03 18:59:50 by minseok2          #+#    #+#             */
-/*   Updated: 2023/02/05 22:18:19 by minseok2         ###   ########.fr       */
+/*   Updated: 2023/02/06 08:01:50 by minseok2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/philo.h"
-#include <sys/time.h>
 
 void	*dining_routine(void *_philo)
 {
@@ -24,8 +23,8 @@ void	*dining_routine(void *_philo)
 	t_timeval					current_time;
 
 	philo = _philo;
-	pthread_mutex_lock(&philo->shared_data->start_mutex);
-	pthread_mutex_unlock(&philo->shared_data->start_mutex);
+	//pthread_mutex_lock(&philo->shared_data->start_mutex);
+	//pthread_mutex_unlock(&philo->shared_data->start_mutex);
 	if (philo->number % 2)
 	{
 		gettimeofday(&current_time, NULL);

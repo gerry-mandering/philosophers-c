@@ -1,21 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   print_msg.c                                        :+:      :+:    :+:   */
+/*   convert_to_ms_time.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: minseok2 <minseok2@student.42seoul.kr      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/03 19:55:21 by minseok2          #+#    #+#             */
-/*   Updated: 2023/02/05 13:37:08 by minseok2         ###   ########.fr       */
+/*   Created: 2023/02/03 19:59:36 by minseok2          #+#    #+#             */
+/*   Updated: 2023/02/03 20:00:36 by minseok2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/philo.h"
 
-void	print_msg(t_philo *philo, uint64_t current_ms_time, const char *msg)
+uint64_t	convert_to_ms_time(t_timeval time)
 {
-	uint64_t	time_diff;
+	uint64_t	millisecond;
 
-	time_diff = current_ms_time - philo->shared_data->start_ms_time;
-	printf("%llu %llu %s\n", time_diff, philo->number, msg);
+	millisecond = (time.tv_sec * 1000) + (time.tv_usec / 1000);
+	return (millisecond);
 }

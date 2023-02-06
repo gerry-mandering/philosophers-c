@@ -1,21 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   print_msg.c                                        :+:      :+:    :+:   */
+/*   ft_pthread_mutex_init.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: minseok2 <minseok2@student.42seoul.kr      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/03 19:55:21 by minseok2          #+#    #+#             */
-/*   Updated: 2023/02/05 13:37:08 by minseok2         ###   ########.fr       */
+/*   Created: 2023/02/01 14:24:04 by minseok2          #+#    #+#             */
+/*   Updated: 2023/02/03 17:05:01 by minseok2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/philo.h"
 
-void	print_msg(t_philo *philo, uint64_t current_ms_time, const char *msg)
+int	ft_pthread_mutex_init(enum e_state *state, \
+						pthread_mutex_t *mutex, const pthread_mutexattr_t *attr)
 {
-	uint64_t	time_diff;
+	int	ret;
 
-	time_diff = current_ms_time - philo->shared_data->start_ms_time;
-	printf("%llu %llu %s\n", time_diff, philo->number, msg);
+	if (*state == ERROR)
+		return (1);
+	ret = pthread_mutex_init(mutex, attr);
+	if (ret != 0)
+	{
+		*state = ERROR;
+		return (ret);
+	}
+	return (ret);
 }

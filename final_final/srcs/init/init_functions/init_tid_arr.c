@@ -1,21 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   print_msg.c                                        :+:      :+:    :+:   */
+/*   init_tid_arr.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: minseok2 <minseok2@student.42seoul.kr      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/03 19:55:21 by minseok2          #+#    #+#             */
-/*   Updated: 2023/02/05 13:37:08 by minseok2         ###   ########.fr       */
+/*   Created: 2023/02/06 09:27:07 by minseok2          #+#    #+#             */
+/*   Updated: 2023/02/06 09:33:06 by minseok2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/philo.h"
+#include "../../../includes/philo.h"
 
-void	print_msg(t_philo *philo, uint64_t current_ms_time, const char *msg)
+pthread_t	*init_tid_arr(t_state *state, t_data *data)
 {
-	uint64_t	time_diff;
+	pthread_t	*tid_arr;
 
-	time_diff = current_ms_time - philo->shared_data->start_ms_time;
-	printf("%llu %llu %s\n", time_diff, philo->number, msg);
+	tid_arr = ft_malloc(state, \
+						sizeof(pthread_t) * data->rule.number_of_philosophers);
+	if (*state != ERROR)
+		*state = FINISH_INIT;
+	return (tid_arr);
 }

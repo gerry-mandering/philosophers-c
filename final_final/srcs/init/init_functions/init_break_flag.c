@@ -1,21 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   print_msg.c                                        :+:      :+:    :+:   */
+/*   init_break_flag.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: minseok2 <minseok2@student.42seoul.kr      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/03 19:55:21 by minseok2          #+#    #+#             */
-/*   Updated: 2023/02/05 13:37:08 by minseok2         ###   ########.fr       */
+/*   Created: 2023/02/06 09:26:01 by minseok2          #+#    #+#             */
+/*   Updated: 2023/02/06 13:19:09 by minseok2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/philo.h"
+#include "../../../includes/philo.h"
 
-void	print_msg(t_philo *philo, uint64_t current_ms_time, const char *msg)
+t_flag	init_break_flag(t_state *state)
 {
-	uint64_t	time_diff;
+	t_flag	break_flag;
 
-	time_diff = current_ms_time - philo->shared_data->start_ms_time;
-	printf("%llu %llu %s\n", time_diff, philo->number, msg);
+	break_flag.state = false;
+	ft_pthread_mutex_init(state, &break_flag.mutex, NULL);
+	if (*state != ERROR)
+		*state = INIT_START_MUTEX;
+	return (break_flag);
 }

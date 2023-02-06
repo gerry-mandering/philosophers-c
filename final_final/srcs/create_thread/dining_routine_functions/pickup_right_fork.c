@@ -1,29 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   putdown_right_fork.c                               :+:      :+:    :+:   */
+/*   pickup_right_fork.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: minseok2 <minseok2@student.42seoul.kr      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/03 19:49:13 by minseok2          #+#    #+#             */
-/*   Updated: 2023/02/05 19:30:35 by minseok2         ###   ########.fr       */
+/*   Created: 2023/02/06 11:32:41 by minseok2          #+#    #+#             */
+/*   Updated: 2023/02/06 15:49:35 by minseok2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/philo.h"
 
-void	putdown_right_fork(t_dining_state *dining_state, t_philo *philo)
+static void	return_fork(t_philo *philo)
 {
-	//printf("%llu %s\n", philo->number, __func__);
+	philo->left_fork->state = RELEASE;
+	pthread_mutex_unlock(&philo->left_fork->mutex);
 	philo->right_fork->state = RELEASE;
 	pthread_mutex_unlock(&philo->right_fork->mutex);
-	pthread_mutex_lock(&philo->shared_data->break_flag.mutex);
-	if (philo->shared_data->break_flag.state == true)
+}
+
+void	pickup_right_fork(t_dining_state *dining_state, t_philo *philo)
+{
+	pthread_mutex_lock(&philo->right_fork->mutex);
+	philo->right_fork->state = HOLD;
+	if (is_break_flag_on(philo->break_flag))
 	{
-		pthread_mutex_unlock(&philo->shared_data->break_flag.mutex);
-		*dining_state = BREAK;
+		return_fork(philo);
+		*dining_state = FINISH_DINING;
 		return ;
 	}
-	pthread_mutex_unlock(&philo->shared_data->break_flag.mutex);
-	*dining_state = GO_SLEEP;
+	else
+	{
+		print_msg(philo, get_current_time(), "has taken a fork");
+		pthread_mutex_unlock(&philo->break_flag->mutex);
+		*dining_state = EAT;
+	}
 }
