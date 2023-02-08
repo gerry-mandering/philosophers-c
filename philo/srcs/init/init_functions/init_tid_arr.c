@@ -6,7 +6,7 @@
 /*   By: minseok2 <minseok2@student.42seoul.kr      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 09:27:07 by minseok2          #+#    #+#             */
-/*   Updated: 2023/02/06 09:33:06 by minseok2         ###   ########.fr       */
+/*   Updated: 2023/02/07 12:47:50 by minseok2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,6 @@ pthread_t	*init_tid_arr(t_state *state, t_data *data)
 	tid_arr = ft_malloc(state, \
 						sizeof(pthread_t) * data->rule.number_of_philosophers);
 	if (*state != ERROR)
-		*state = FINISH_INIT;
+		*state = CREATE_THREAD;
 	return (tid_arr);
 }

@@ -6,7 +6,7 @@
 /*   By: minseok2 <minseok2@student.42seoul.kr      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/01 11:46:22 by minseok2          #+#    #+#             */
-/*   Updated: 2023/02/06 13:57:25 by minseok2         ###   ########.fr       */
+/*   Updated: 2023/02/07 12:39:46 by minseok2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,5 @@ uint64_t	ascii_to_ull(enum e_state *state, const char *str)
 		}
 		i++;
 	}
-	if (number == 0)
-		*state = ERROR;
 	return (number);
 }

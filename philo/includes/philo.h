@@ -6,7 +6,7 @@
 /*   By: minseok2 <minseok2@student.42seoul.kr      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 08:19:17 by minseok2          #+#    #+#             */
-/*   Updated: 2023/02/06 16:01:46 by minseok2         ###   ########.fr       */
+/*   Updated: 2023/02/07 12:47:18 by minseok2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ typedef enum e_state
 	INIT_FORK_ARR,
 	INIT_PHILO_ARR,
 	INIT_TID_ARR,
-	FINISH_INIT,
 	CREATE_THREAD,
 	MONITORING,
 	JOIN_THREAD,

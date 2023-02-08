@@ -6,7 +6,7 @@
 /*   By: minseok2 <minseok2@student.42seoul.kr      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 09:33:50 by minseok2          #+#    #+#             */
-/*   Updated: 2023/02/06 14:06:41 by minseok2         ###   ########.fr       */
+/*   Updated: 2023/02/07 13:40:19 by minseok2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,8 @@ void	create_thread(t_state *state, t_data *data)
 		if (pthread_create(&data->tid_arr[i], \
 							NULL, dining_routine, &data->philo_arr[i]))
 		{
-			pthread_mutex_unlock(&data->start_mutex);
 			detach_threads(data->tid_arr, i);
+			pthread_mutex_unlock(&data->start_mutex);
 			*state = ERROR;
 			return ;
 		}
